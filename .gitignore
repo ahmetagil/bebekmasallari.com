@@ -26,3 +26,6 @@ npm-debug.log*
 # editör
 .vscode/
 .idea/
+
+# ZCode session dosyalari (private)
+.zcode/
