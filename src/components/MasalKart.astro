@@ -1,0 +1,128 @@
+---
+// ============================================================
+// MasalKart.astro — Anasayfa ve kategori sayfalarında masal
+// listelemek için kart. Tıklanabilir, görsel, SEO-friendly.
+// ============================================================
+import { KATEGORILER } from '../config';
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  masal: CollectionEntry<'masallar'>;
+  // Index'ten küçük görsel varyasyon için
+  index?: number;
+}
+
+const { masal, index = 0 } = Astro.props;
+const { data } = masal;
+const kategori = KATEGORILER[data.kategori];
+const url = `/masallar/${masal.slug}/`;
+
+// Tarihi Türkçe biçimlendir
+const tarihFormatli = new Intl.DateTimeFormat('tr-TR', {
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
+}).format(new Date(data.pubDate));
+---
+
+<article class="masal-kart" style={`--kart-renk: ${kategori.renk}; --kart-renk-acik: ${kategori.renkAcik};`}>
+  <a href={url} class="kart-link">
+    <div class="kart-gorsel" aria-hidden="true">
+      <span class="kart-emoji">{kategori.emoji}</span>
+    </div>
+    <div class="kart-govde">
+      <span class="kart-kategori">{kategori.isim}</span>
+      <h3 class="kart-baslik">{data.title}</h3>
+      <p class="kart-aciklama">{data.description}</p>
+      <div class="kart-meta">
+        <span class="meta-tag" title="Yaş aralığı">👶 {data.yasAraligi}</span>
+        <span class="meta-tag" title="Okuma süresi">⏱️ {data.okumaSuresi} dk</span>
+      </div>
+    </div>
+  </a>
+</article>
+
+<style>
+  .masal-kart {
+    background: var(--bg-kart);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--krem-koyu);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    height: 100%;
+  }
+  .masal-kart:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .kart-link {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    color: inherit;
+  }
+  .kart-link:hover { text-decoration: none; }
+
+  .kart-gorsel {
+    background: linear-gradient(135deg, var(--kart-renk-acik), var(--kart-renk));
+    height: clamp(110px, 30vw, 140px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+  .kart-emoji {
+    font-size: clamp(2.5rem, 8vw, 3.5rem);
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+  }
+
+  .kart-govde {
+    padding: var(--space-4) var(--space-4) var(--space-6);
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+
+  .kart-kategori {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--vurgu-koyu);
+    margin-bottom: var(--space-2);
+  }
+
+  .kart-baslik {
+    font-size: 1.2rem;
+    margin-bottom: var(--space-2);
+    line-height: 1.3;
+  }
+
+  .kart-aciklama {
+    color: var(--yazi-yumuşak);
+    font-size: 0.92rem;
+    margin-bottom: var(--space-4);
+    flex: 1;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .kart-meta {
+    display: flex;
+    gap: var(--space-3);
+    flex-wrap: wrap;
+  }
+  .meta-tag {
+    font-size: 0.82rem;
+    color: var(--yazi-yumuşak);
+    background: var(--bg-bolum);
+    padding: 0.2rem 0.6rem;
+    border-radius: var(--radius-full);
+  }
+</style>

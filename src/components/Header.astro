@@ -1,0 +1,192 @@
+---
+// ============================================================
+// Header.astro — Sabit üst menü. Mobilde hamburger menü.
+// Minimal JS ile erişilebilir (a11y) menü.
+// ============================================================
+import { SITE, NAV } from '../config';
+---
+
+<header class="site-header">
+  <div class="container header-ic">
+    <a href="/" class="logo" aria-label={`${SITE.title} anasayfa`}>
+      <img src="/favicon.svg" alt="" width="36" height="36" />
+      <span class="logo-yazi">
+        <strong>bebek</strong>masallari
+        <span class="logo-tld">.com</span>
+      </span>
+    </a>
+
+    <nav class="nav-desktop" aria-label="Ana menü">
+      <ul>
+        {NAV.map((item) => (
+          <li>
+            <a
+              href={item.href}
+              aria-current={Astro.url.pathname === item.href ? 'page' : undefined}
+            >
+              {item.etiket}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+
+    <button
+      class="nav-toggle"
+      aria-label="Menüyü aç/kapat"
+      aria-expanded="false"
+      aria-controls="mobil-menu"
+      id="nav-toggle"
+    >
+      <span class="hamburger"></span>
+    </button>
+  </div>
+
+  <!-- Mobil menü -->
+  <nav class="nav-mobile" id="mobil-menu" aria-label="Mobil menü" hidden>
+    <ul>
+      {NAV.map((item) => (
+        <li>
+          <a href={item.href}>{item.etiket}</a>
+        </li>
+      ))}
+    </ul>
+  </nav>
+</header>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(253, 248, 240, 0.92);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--krem-koyu);
+  }
+
+  .header-ic {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-block: var(--space-3);
+    gap: var(--space-4);
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-family: var(--font-serif);
+    font-size: 1.25rem;
+    color: var(--yazi);
+    font-weight: 400;
+  }
+  .logo:hover { text-decoration: none; }
+  .logo strong { color: var(--vurgu); font-weight: 700; }
+  .logo-yazi { letter-spacing: -0.02em; }
+  .logo-tld { color: var(--yazi-acik); font-size: 0.85em; }
+
+  .nav-desktop ul {
+    display: flex;
+    list-style: none;
+    gap: var(--space-2);
+    padding: 0;
+    margin: 0;
+  }
+  .nav-desktop a {
+    display: inline-flex;
+    align-items: center;
+    padding: var(--space-3) var(--space-3);
+    border-radius: var(--radius-full);
+    color: var(--yazi-yumuşak);
+    font-size: 0.95rem;
+    font-weight: 500;
+    transition: all 0.15s ease;
+    min-height: 40px;
+  }
+  .nav-desktop a:hover {
+    background: var(--lavanta-acik);
+    color: var(--vurgu-koyu);
+    text-decoration: none;
+  }
+  .nav-desktop a[aria-current='page'] {
+    background: var(--lavanta);
+    color: white;
+  }
+
+  .nav-toggle {
+    display: none;
+    background: transparent;
+    border: none;
+    padding: var(--space-3);
+    border-radius: var(--radius-sm);
+    min-width: 44px;
+    min-height: 44px;
+    align-items: center;
+    justify-content: center;
+  }
+  .hamburger,
+  .hamburger::before,
+  .hamburger::after {
+    display: block;
+    width: 24px;
+    height: 2px;
+    background: var(--yazi);
+    border-radius: 2px;
+    transition: transform 0.2s ease;
+  }
+  .hamburger {
+    position: relative;
+  }
+  .hamburger::before,
+  .hamburger::after {
+    content: '';
+    position: absolute;
+    left: 0;
+  }
+  .hamburger::before { top: -7px; }
+  .hamburger::after { top: 7px; }
+
+  .nav-mobile {
+    border-top: 1px solid var(--krem-koyu);
+    background: var(--bg);
+  }
+  .nav-mobile ul {
+    list-style: none;
+    padding: var(--space-2) 0;
+    margin: 0;
+  }
+  .nav-mobile a {
+    display: block;
+    padding: var(--space-4) var(--space-4);
+    color: var(--yazi);
+    font-weight: 500;
+    border-radius: 0;
+    min-height: 44px;
+  }
+  .nav-mobile a:hover {
+    background: var(--lavanta-acik);
+    text-decoration: none;
+  }
+
+  @media (max-width: 860px) {
+    .nav-desktop { display: none; }
+    .nav-toggle { display: inline-flex; }
+  }
+  @media (min-width: 861px) {
+    .nav-mobile { display: none !important; }
+  }
+</style>
+
+<script>
+  // Mobil menü aç/kapat — minimal, erişilebilir
+  const toggle = document.getElementById('nav-toggle');
+  const menu = document.getElementById('mobil-menu');
+  if (toggle && menu) {
+    toggle.addEventListener('click', () => {
+      const acik = toggle.getAttribute('aria-expanded') === 'true';
+      toggle.setAttribute('aria-expanded', String(!acik));
+      menu.hidden = acik;
+    });
+  }
+</script>

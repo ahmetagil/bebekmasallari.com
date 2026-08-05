@@ -1,0 +1,142 @@
+---
+// Yasal Uyarı — Affiliate disclosure ve telif uyarısı
+import Base from '../layouts/Base.astro';
+import { SITE } from '../config';
+const guncelleme = new Intl.DateTimeFormat('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' }).format(new Date());
+---
+
+<Base
+  title="Yasal Uyarı"
+  description="bebekmasallari.com yasal uyarı. Telif hakları, affiliate bağlantıları ve sorumluluk reddi hakkında bilgilendirme."
+>
+  <article class="sayfa-icerik">
+    <div class="container oku-alani">
+      <header class="sayfa-baslik">
+        <h1>Yasal Uyarı</h1>
+        <p class="sayfa-altbaslik">Son güncelleme: {guncelleme}</p>
+      </header>
+
+      <div class="yasal-metin">
+        <h2>1. Telif Hakkı</h2>
+        <p>
+          <strong>{SITE.url}</strong> sitesinde yayımlanan tüm masallar ve
+          içerikler — metinler, görseller, tasarım — aksi belirtilmedikçe
+          {SITE.name}'ye aittir ve telif hakkı ile korunmaktadır.
+        </p>
+        <p>
+          İçeriğimiz; izinsiz olarak çoğaltılamaz, yayımlanamaz,
+          değiştirilemez veya ticari amaçla kullanılamaz. Kişisel kullanım
+          ve çocuğunuza okumak için serbesttir. Paylaşım için lütfen
+          doğrudan sayfa bağlantısını kullanın.
+        </p>
+
+        <h2>2. Affiliate (Satış Ortaklığı) Açıklaması</h2>
+        <div class="vurgu-kutu">
+          <p>
+            Sitemizdeki bazı bağlantılar <strong>affiliate (satış ortağı)
+            bağlantılarıdır</strong>. Bu, bir ürüne tıklayıp satın aldığınızda,
+            size <strong>ek bir maliyet oluşmadan</strong> küçük bir komisyon
+            kazanabileceğimiz anlamına gelir.
+          </p>
+        </div>
+        <ul>
+          <li>Bu komisyonlar sitenin bakımını ve ücretsiz içeriği destekler.</li>
+          <li>
+            Önerilerimiz bağımsız editoryal kararlardır; komisyon ürün seçimimizi etkilemez.
+          </li>
+          <li>
+            Bir ürünü yalnızca gerçekten yararlı olduğunu düşündüğümüzde öneririz.
+          </li>
+          <li>
+            Fiyatlar ve ürün durumu satıcı platforma aittir ve değişebilir;
+            nihai bilgi için satıcı sitesini kontrol edin.
+          </li>
+        </ul>
+
+        <h2>3. Amazon Associates Programı</h2>
+        <p>
+          {SITE.name}, Amazon Associates Programı'nın katılımcısıdır. Bu,
+          uygun satın alımlar üzerinden reklam ücreti kazandığımız bir
+          affiliate reklam programıdır. Amazon logolaru ve Amazon markası,
+          Amazon.com, Inc. veya yan kuruluşlarının ticari markalarıdır.
+        </p>
+
+        <h2>4. Sorumluluk Reddi</h2>
+        <p>
+          Sitedeki masallar ve içerikler yalnızca eğlence ve genel bilgi
+          amaçlıdır. Tıbbi, psikolojik veya pedagojik tavsiye yerine geçmez.
+          Çocuğunuzla ilgili özel bir endişeniz varsa bir uzmana danışın.
+        </p>
+        <p>
+          Ebeveyn rehberi bölümlerinde yer alan öneriler genel niteliktedir;
+          her çocuğun gelişimsel süreci farklıdır. Çocuğunuzu en iyi tanıyan
+          kişi olarak son kararı siz verirsiniz.
+        </p>
+
+        <h2>5. Dış Bağlantılar</h2>
+        <p>
+          Sitemiz diğer sitelere bağlantı verebilir. Bu sitelerin içerikleri
+          ve gizlilik uygulamaları üzerinde kontrolümüz yoktur. Dış bir siteyi
+          ziyaret ettiğinizde o sitenin kendi şartlarını kabul etmiş olursunuz.
+        </p>
+
+        <h2>6. Reklamlar</h2>
+        <p>
+          Sitemiz ileride Google AdSense gibi üçüncü taraf reklam
+          ağlarından reklam gösterebilir. Reklamlar reklamverenler tarafından
+          sunulur ve içeriklerinden sorumlu değiliz. Reklam kişiselleştirme
+          ayarlarınızı tarayıcınızdan veya Google hesabınızdan yönetebilirsiniz.
+        </p>
+
+        <h2>7. Değişiklikler</h2>
+        <p>
+          Bu yasal uyarı zaman zaman güncellenebilir. Önemli değişiklikler
+          bu sayfada duyurulur.
+        </p>
+
+        <h2>8. İletişim</h2>
+        <p>
+          Telif, affiliate veya yasal konularda sorularınız için:
+          <a href={`mailto:${SITE.email}`}>{SITE.email}</a>
+        </p>
+      </div>
+    </div>
+  </article>
+</Base>
+
+<style>
+  .sayfa-icerik { padding-block: var(--space-12) var(--space-16); }
+  .sayfa-baslik {
+    text-align: center;
+    margin-bottom: var(--space-12);
+  }
+  .sayfa-altbaslik {
+    color: var(--yazi-acik);
+    font-size: 1rem;
+  }
+  .yasal-metin {
+    font-size: 1rem;
+    line-height: 1.8;
+  }
+  .yasal-metin h2 {
+    font-size: 1.3rem;
+    margin-top: var(--space-12);
+    margin-bottom: var(--space-3);
+    color: var(--vurgu-koyu);
+    padding-bottom: var(--space-2);
+    border-bottom: 1px solid var(--krem-koyu);
+  }
+  .vurgu-kutu {
+    background: var(--mint-acik);
+    padding: var(--space-6);
+    border-radius: var(--radius-md);
+    border-left: 4px solid var(--mint);
+    margin: var(--space-4) 0 var(--space-6);
+  }
+  .vurgu-kutu p:last-child { margin-bottom: 0; }
+  .yasal-metin ul, .yasal-metin ol {
+    margin-bottom: var(--space-4);
+    padding-left: 1.5rem;
+  }
+  .yasal-metin li { margin-bottom: var(--space-2); }
+</style>

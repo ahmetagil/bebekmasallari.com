@@ -1,0 +1,192 @@
+---
+// ============================================================
+// /kategori/[kategori].astro — Kategori listing sayfası.
+// ============================================================
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import MasalKart from '../../components/MasalKart.astro';
+import { KATEGORILER, SITE, type KategoriSlug } from '../../config';
+
+export async function getStaticPaths() {
+  return Object.keys(KATEGORILER).map((kategori) => ({
+    params: { kategori },
+  }));
+}
+
+const { kategori } = Astro.params as { kategori: KategoriSlug };
+const kat = KATEGORILER[kategori];
+
+const masallar = (await getCollection('masallar'))
+  .filter((m) => m.data.kategori === kategori)
+  .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
+
+const tumMasallar = await getCollection('masallar');
+const toplamMasal = tumMasallar.length;
+
+const seoTitle = `${kat.isim}: Çocuklar İçin ${masallar.length} Masal`;
+const seoAciklama = `${kat.isim} kategorisinde ${masallar.length} özgün masal. ${kat.aciklama} Ebeveyn rehberi ile birlikte, ücretsiz okuyun.`;
+---
+
+<Base title={seoTitle} description={seoAciklama}>
+  <!-- Breadcrumb -->
+  <nav class="breadcrumb" aria-label="Sayfa yolu">
+    <div class="container">
+      <ol>
+        <li><a href="/">Anasayfa</a></li>
+        <li aria-hidden="true">›</li>
+        <li aria-current="page">{kat.isim}</li>
+      </ol>
+    </div>
+  </nav>
+
+  <!-- Kategori başlığı -->
+  <header class="kategori-hero" style={`--k-renk: ${kat.renk}; --k-renk-acik: ${kat.renkAcik};`}>
+    <div class="container">
+      <span class="kategori-emoji" aria-hidden="true">{kat.emoji}</span>
+      <h1>{kat.isim}</h1>
+      <p class="kategori-aciklama">{kat.aciklama}</p>
+      <div class="kategori-istatistik">
+        <strong>{masallar.length}</strong> masal • Her biri ebeveyn rehberi ile
+      </div>
+    </div>
+  </header>
+
+  <!-- Masal listesi -->
+  <section class="kategori-liste">
+    <div class="container">
+      {masallar.length > 0 ? (
+        <div class="masal-grid">
+          {masallar.map((masal, i) => (
+            <MasalKart masal={masal} index={i} />
+          ))}
+        </div>
+      ) : (
+        <div class="bos-durum">
+          <p>Bu kategoride henüz masal yok. Yakında eklenecek! 🌟</p>
+          <a href="/" class="btn btn-primary">Tüm masallara dön</a>
+        </div>
+      )}
+    </div>
+  </section>
+
+  <!-- Diğer kategoriler -->
+  <section class="diger-kategoriler">
+    <div class="container">
+      <h2>Diğer Kategoriler</h2>
+      <div class="diger-grid">
+        {Object.entries(KATEGORILER)
+          .filter(([slug]) => slug !== kategori)
+          .map(([slug, k]) => (
+            <a href={`/kategori/${slug}/`} class="diger-kart" style={`--k-renk: ${k.renk}; --k-renk-acik: ${k.renkAcik};`}>
+              <span class="diger-emoji" aria-hidden="true">{k.emoji}</span>
+              <span class="diger-isim">{k.isim}</span>
+            </a>
+          ))}
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .breadcrumb {
+    background: var(--bg-bolum);
+    padding-block: var(--space-3);
+    font-size: 0.85rem;
+  }
+  .breadcrumb ol {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+  .breadcrumb li[aria-current='page'] {
+    color: var(--yazi);
+    font-weight: 500;
+  }
+
+  .kategori-hero {
+    background: linear-gradient(135deg, var(--k-renk-acik), white);
+    padding-block: var(--space-12);
+    text-align: center;
+  }
+  .kategori-emoji {
+    font-size: 4rem;
+    display: block;
+    margin-bottom: var(--space-2);
+  }
+  .kategori-hero h1 {
+    margin-bottom: var(--space-3);
+  }
+  .kategori-aciklama {
+    font-size: 1.1rem;
+    color: var(--yazi-yumuşak);
+    max-width: 50ch;
+    margin-inline: auto;
+    margin-bottom: var(--space-4);
+  }
+  .kategori-istatistik {
+    color: var(--yazi-acik);
+    font-size: 0.95rem;
+  }
+  .kategori-istatistik strong {
+    color: var(--vurgu-koyu);
+    font-size: 1.1rem;
+  }
+
+  .kategori-liste {
+    padding-block: var(--space-12);
+  }
+  .masal-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr));
+    gap: var(--space-6);
+  }
+
+  .bos-durum {
+    text-align: center;
+    padding: var(--space-16) var(--space-4);
+    color: var(--yazi-yumuşak);
+  }
+  .bos-durum p { margin-bottom: var(--space-4); }
+
+  .diger-kategoriler {
+    background: var(--bg-bolum);
+    padding-block: var(--space-12);
+    margin-top: var(--space-8);
+  }
+  .diger-kategoriler h2 {
+    text-align: center;
+    margin-bottom: var(--space-8);
+  }
+  .diger-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(180px, 100%), 1fr));
+    gap: var(--space-4);
+    max-width: 800px;
+    margin-inline: auto;
+  }
+  .diger-kart {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-6) var(--space-4);
+    background: white;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+    transition: transform 0.2s ease;
+    color: var(--yazi);
+  }
+  .diger-kart:hover {
+    transform: translateY(-3px);
+    text-decoration: none;
+    box-shadow: var(--shadow-md);
+  }
+  .diger-emoji { font-size: 2.5rem; }
+  .diger-isim {
+    font-weight: 600;
+    color: var(--yazi);
+  }
+</style>

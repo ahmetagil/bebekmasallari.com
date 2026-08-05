@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>🌙 Masal Yazma Stüdyosu — bebekmasallari.com</title>
+  <link rel="stylesheet" href="/style.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌙</text></svg>" />
+</head>
+<body>
+  <header class="panel-ust">
+    <div class="panel-baslik">
+      <span class="ay-logo">🌙</span>
+      <div>
+        <h1>Masal Yazma Stüdyosu</h1>
+        <p class="altbaslik">bebekmasallari.com — Yeni masal ekle, düzenle, yayınla</p>
+      </div>
+    </div>
+    <nav class="panel-nav">
+      <button id="sekme-yeni" class="sekme aktif" type="button">✍️ Yeni Masal</button>
+      <button id="sekme-liste" class="sekme" type="button">📚 Masallarım <span id="masal-sayi" class="sayi-badge">0</span></button>
+      <button id="btn-build" class="sekme build-btn" type="button" title="Siteyi güncelle (npm run build)">🔨 Siteyi Güncelle</button>
+    </nav>
+  </header>
+
+  <main class="panel-main">
+    <!-- ============ YENİ MASAL FORMU ============ -->
+    <section id="gorunum-yeni" class="gorunum aktif">
+      <form id="masal-form" class="masal-form">
+        <input type="hidden" id="duzenleme-slug" value="" />
+
+        <!-- Üst meta alanları -->
+        <div class="form-grid-2">
+          <div class="form-alan">
+            <label for="baslik">Başlık <span class="zorunlu">*</span></label>
+            <input type="text" id="baslik" name="title" placeholder="Örn: Uyku Getiren Yıldız" required />
+            <small class="ipucu">Slug: <code id="slug-onizleme">otomatik-uretilecek</code></small>
+          </div>
+
+          <div class="form-alan">
+            <label for="kategori">Kategori <span class="zorunlu">*</span></label>
+            <select id="kategori" name="kategori" required>
+              <option value="">Seç...</option>
+              <option value="uyku-masallari">🌙 Uyku Masalları</option>
+              <option value="arkadaslik-masallari">🤝 Arkadaşlık Masalları</option>
+              <option value="cesaret-masallari">🦁 Cesaret Masalları</option>
+              <option value="sevgi-masallari">💗 Sevgi Masalları</option>
+              <option value="ogretici-masallari">🌱 Öğretici Masallar</option>
+            </select>
+          </div>
+
+          <div class="form-alan">
+            <label for="yas">Yaş Aralığı <span class="zorunlu">*</span></label>
+            <input type="text" id="yas" name="yasAraligi" list="yas-onerileri" placeholder="Örn: 3-6 yaş" required />
+            <datalist id="yas-onerileri">
+              <option value="1-3 yaş"></option>
+              <option value="2-4 yaş"></option>
+              <option value="2-5 yaş"></option>
+              <option value="3-5 yaş"></option>
+              <option value="3-6 yaş"></option>
+              <option value="4-6 yaş"></option>
+              <option value="4-7 yaş"></option>
+              <option value="5-8 yaş"></option>
+            </datalist>
+          </div>
+
+          <div class="form-alan">
+            <label for="sure">Okuma Süresi (dakika)</label>
+            <input type="number" id="sure" name="okumaSuresi" min="1" max="20" value="4" />
+            <small class="ipucu">Metin uzunluğuna göre otomatik hesaplanır</small>
+          </div>
+        </div>
+
+        <!-- Açıklama (SEO) -->
+        <div class="form-alan">
+          <label for="aciklama">
+            Kısa Açıklama (SEO) <span class="zorunlu">*</span>
+            <span id="aciklama-sayac" class="sayac">0 karakter</span>
+          </label>
+          <textarea id="aciklama" name="description" rows="2" maxlength="170"
+            placeholder="Google'da çıkacak açıklama. Aranabilir kelimeler içersin. Örn: 'Uyumak istemeyen küçük Ada'nın, gökyüzünden inen nazik bir yıldızla tanışmasını anlatan sakinleştirici bir uyku masalı.'"
+            required></textarea>
+          <small class="ipucu">İdeal: <strong>150-160 karakter</strong>. <span id="aciklama-durum">📝</span></small>
+        </div>
+
+        <!-- Keywords -->
+        <div class="form-alan">
+          <label for="keyword-input">Anahtar Kelimeler (SEO)</label>
+          <div class="etiket-input">
+            <input type="text" id="keyword-input" placeholder="Kelime yaz, Enter'a bas (örn: uyku masalı)" />
+          </div>
+          <div id="keyword-liste" class="etiket-liste"></div>
+          <small class="ipucu">En az 3-5 kelime. Google'da bulunabilirliği artırır.</small>
+        </div>
+
+        <!-- Masal metni -->
+        <div class="form-alan">
+          <label for="icerik">
+            Masal Metni <span class="zorunlu">*</span>
+            <span id="kelime-sayac" class="sayac">0 kelime</span>
+          </label>
+          <textarea id="icerik" name="icerik" rows="18"
+            placeholder="Bir varmış, bir yokmuş...&#10;&#10;[Masalınızı buraya yazın. Kalın için **metin**, italik için *metin* kullanabilirsiniz.]"
+            required></textarea>
+          <small class="ipucu">İdeal: <strong>600-900 kelime</strong>. <strong>**kalın**</strong> ve <em>*italik*</em> desteklenir.</small>
+        </div>
+
+        <!-- Dersler (dinamik liste) -->
+        <div class="form-alan">
+          <label>Masaldan Çıkarılacak Dersler <span class="zorunlu">*</span></label>
+          <div id="dersler-liste" class="dinamik-liste"></div>
+          <button type="button" class="btn-ekle" data-hedef="dersler-liste">+ Ders Ekle</button>
+          <small class="ipucu">En az 3 ders. Ebeveynler için masalın değerini artırır.</small>
+        </div>
+
+        <!-- Tartışma soruları (dinamik liste) -->
+        <div class="form-alan">
+          <label>Çocukla Tartışma Soruları <span class="zorunlu">*</span></label>
+          <div id="sorular-liste" class="dinamik-liste"></div>
+          <button type="button" class="btn-ekle" data-hedef="sorular-liste">+ Soru Ekle</button>
+          <small class="ipucu">En az 3 açık uçlu soru.</small>
+        </div>
+
+        <!-- Aksiyon butonları -->
+        <div class="form-aksiyon">
+          <button type="submit" id="btn-yayinla" class="btn-buyuk btn-primary">
+            ✨ Yayınla
+          </button>
+          <button type="button" id="btn-temizle" class="btn-buyuk btn-secondary">Temizle</button>
+        </div>
+      </form>
+    </section>
+
+    <!-- ============ MASAL LİSTESİ ============ -->
+    <section id="gorunum-liste" class="gorunum">
+      <div class="liste-ust">
+        <h2>📚 Tüm Masallar</h2>
+        <div class="liste-filtre">
+          <select id="filtre-kategori">
+            <option value="">Tüm kategoriler</option>
+            <option value="uyku-masallari">🌙 Uyku</option>
+            <option value="arkadaslik-masallari">🤝 Arkadaşlık</option>
+            <option value="cesaret-masallari">🦁 Cesaret</option>
+            <option value="sevgi-masallari">💗 Sevgi</option>
+            <option value="ogretici-masallari">🌱 Öğretici</option>
+          </select>
+        </div>
+      </div>
+      <div id="masal-listesi" class="yonetim-liste">
+        <p class="bos-mesaj">Yükleniyor...</p>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============ TOAST BİLDİRİM ============ -->
+  <div id="toast" class="toast" role="alert" aria-live="polite"></div>
+
+  <!-- ============ ONAY MODALI ============ -->
+  <div id="modal" class="modal-kapsayici" hidden>
+    <div class="modal">
+      <h3 id="modal-baslik">Emin misiniz?</h3>
+      <p id="modal-mesaj"></p>
+      <div class="modal-aksiyon">
+        <button type="button" id="modal-iptal" class="btn-secondary">İptal</button>
+        <button type="button" id="modal-onayla" class="btn-danger">Sil</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/app.js"></script>
+</body>
+</html>

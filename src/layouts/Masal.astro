@@ -1,0 +1,290 @@
+---
+// ============================================================
+// Masal.astro — Tek bir masalın gösterildiği sayfa layout'u.
+// Yapı: başlık → meta → masal metni → ebeveyn rehberi →
+// affiliate → ilgili masallar.
+// ============================================================
+import Base from './Base.astro';
+import EbeveynRehberi from '../components/EbeveynRehberi.astro';
+import AffiliateOneri from '../components/AffiliateOneri.astro';
+import JsonLd from '../components/JsonLd.astro';
+import MasalKart from '../components/MasalKart.astro';
+import { KATEGORILER, SITE } from '../config';
+import { getCollection, type CollectionEntry } from 'astro:content';
+
+interface Props {
+  masal: CollectionEntry<'masallar'>;
+  ilgiliMasallar: CollectionEntry<'masallar'>[];
+}
+
+const { masal, ilgiliMasallar } = Astro.props;
+const { data } = masal;
+const { Content } = await masal.render();
+const kategori = KATEGORILER[data.kategori];
+const masalUrl = `/masallar/${masal.slug}/`;
+const tamUrl = new URL(masalUrl, SITE.url).href;
+
+// ISO tarihler (JSON-LD için)
+const pubIso = new Date(data.pubDate).toISOString();
+const modIso = data.updatedDate ? new Date(data.updatedDate).toISOString() : pubIso;
+
+// Türkçe okunabilir tarih
+const tarihFormatli = new Intl.DateTimeFormat('tr-TR', {
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
+}).format(new Date(data.pubDate));
+---
+
+<Base
+  title={data.title}
+  description={data.description}
+  type="article"
+  article={{
+    publishedTime: pubIso,
+    modifiedTime: modIso,
+    author: data.author,
+    section: kategori.isim,
+  }}
+>
+  <JsonLd
+    slot="jsonld"
+    type="article"
+    article={{
+      title: data.title,
+      description: data.description,
+      url: tamUrl,
+      datePublished: pubIso,
+      dateModified: modIso,
+      author: data.author,
+      section: kategori.isim,
+    }}
+  />
+  <JsonLd
+    slot="jsonld"
+    type="breadcrumb"
+    breadcrumbs={[
+      { name: 'Anasayfa', url: '/' },
+      { name: kategori.isim, url: `/kategori/${data.kategori}/` },
+      { name: data.title, url: masalUrl },
+    ]}
+  />
+
+  <article class="masal-sayfa">
+    <!-- Breadcrumb (görsel) -->
+    <nav class="breadcrumb" aria-label="Sayfa yolu">
+      <div class="container">
+        <ol>
+          <li><a href="/">Anasayfa</a></li>
+          <li aria-hidden="true">›</li>
+          <li><a href={`/kategori/${data.kategori}/`}>{kategori.isim}</a></li>
+          <li aria-hidden="true">›</li>
+          <li aria-current="page">{data.title}</li>
+        </ol>
+      </div>
+    </nav>
+
+    <!-- Başlık bölümü -->
+    <header class="masal-baslik-bolum">
+      <div class="container oku-alani">
+        <span class="masal-kategori-etiketi" style={`--k-renk: ${kategori.renk}; --k-renk-acik: ${kategori.renkAcik};`}>
+          <span aria-hidden="true">{kategori.emoji}</span>
+          {kategori.isim}
+        </span>
+        <h1 class="masal-baslik">{data.title}</h1>
+        <p class="masal-aciklama">{data.description}</p>
+
+        <div class="masal-meta">
+          <span title="Yaş aralığı">👶 {data.yasAraligi}</span>
+          <span title="Okuma süresi">⏱️ {data.okumaSuresi} dk okuma</span>
+          <span title="Yayın tarihi">📅 {tarihFormatli}</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Masal metni -->
+    <div class="masal-metni oku-alani container">
+      <div class="masal-icerik-proza">
+        <Content />
+      </div>
+    </div>
+
+    <!-- Ebeveyn rehberi (AdSense için kritik) -->
+    <div class="oku-alani container">
+      <EbeveynRehberi
+        yasAraligi={data.yasAraligi}
+        okumaSuresi={data.okumaSuresi}
+        dersler={data.dersler}
+        tartismaSorulari={data.tartismaSorulari}
+        kategori={data.kategori}
+      />
+    </div>
+
+    <!-- Affiliate önerileri -->
+    <div class="oku-alani container">
+      <AffiliateOneri kategori={data.kategori} />
+    </div>
+
+    <!-- İlgili masallar -->
+    {ilgiliMasallar.length > 0 && (
+      <section class="ilgili-masallar" aria-labelledby="ilgili-baslik">
+        <div class="container">
+          <h2 id="ilgili-baslik">Benzer Masallar</h2>
+          <p class="ilgili-aciklama">
+            "{kategori.isim}" kategorisinden çocuğunuzun seveceği diğer masallar
+          </p>
+          <div class="ilgili-grid">
+            {ilgiliMasallar.slice(0, 3).map((m) => (
+              <MasalKart masal={m} />
+            ))}
+          </div>
+        </div>
+      </section>
+    )}
+  </article>
+</Base>
+
+<style>
+  .breadcrumb {
+    background: var(--bg-bolum);
+    padding-block: var(--space-3);
+    font-size: 0.85rem;
+  }
+  .breadcrumb ol {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2);
+  }
+  .breadcrumb li[aria-current='page'] {
+    color: var(--yazi);
+    font-weight: 500;
+    max-width: 40ch;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .breadcrumb a {
+    color: var(--yazi-yumuşak);
+  }
+
+  .masal-baslik-bolum {
+    padding-block: var(--space-12) var(--space-8);
+    text-align: center;
+  }
+
+  .masal-kategori-etiketi {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+    background: var(--k-renk-acik);
+    color: var(--yazi);
+    padding: 0.3rem 0.9rem;
+    border-radius: var(--radius-full);
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-bottom: var(--space-4);
+  }
+
+  .masal-baslik {
+    margin-bottom: var(--space-3);
+  }
+
+  .masal-aciklama {
+    font-size: 1.15rem;
+    color: var(--yazi-yumuşak);
+    max-width: 55ch;
+    margin-inline: auto;
+    margin-bottom: var(--space-6);
+  }
+
+  .masal-meta {
+    display: flex;
+    justify-content: center;
+    gap: var(--space-4);
+    flex-wrap: wrap;
+    color: var(--yazi-acik);
+    font-size: 0.9rem;
+  }
+
+  .masal-metni {
+    padding-block: var(--space-8);
+  }
+
+  /* Masal içeriği tipografisi — sıcak, okunaklı */
+  .masal-icerik-proza {
+    font-family: var(--font-serif);
+    font-size: 1.18rem;
+    line-height: 1.85;
+    color: var(--yazi);
+  }
+  .masal-icerik-proza :global(p) {
+    margin-bottom: var(--space-6);
+  }
+  .masal-icerik-proza :global(h2) {
+    font-family: var(--font-serif);
+    font-size: 1.5rem;
+    margin-top: var(--space-12);
+    margin-bottom: var(--space-4);
+    color: var(--vurgu-koyu);
+  }
+  .masal-icerik-proza :global(em) {
+    color: var(--vurgu-koyu);
+    font-style: italic;
+  }
+  .masal-icerik-proza :global(strong) {
+    color: var(--vurgu-koyu);
+  }
+  /* İlk paragraf — masal hissi için girinti ve süs */
+  .masal-icerik-proza :global(p:first-of-type)::first-letter {
+    font-size: 3.2rem;
+    font-family: var(--font-serif);
+    float: left;
+    line-height: 1;
+    padding-right: 0.5rem;
+    padding-top: 0.3rem;
+    color: var(--vurgu);
+    font-weight: 700;
+  }
+  .masal-icerik-proza :global(blockquote) {
+    border-left: 3px solid var(--lavanta);
+    padding-left: var(--space-4);
+    margin: var(--space-6) 0;
+    font-style: italic;
+    color: var(--yazi-yumuşak);
+  }
+
+  .ilgili-masallar {
+    padding-block: var(--space-16);
+    background: var(--bg-bolum);
+    margin-top: var(--space-16);
+  }
+  .ilgili-masallar h2 {
+    text-align: center;
+    margin-bottom: var(--space-2);
+  }
+  .ilgili-aciklama {
+    text-align: center;
+    color: var(--yazi-yumuşak);
+    margin-bottom: var(--space-8);
+  }
+  .ilgili-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
+    gap: var(--space-6);
+  }
+
+  @media (max-width: 640px) {
+    .masal-icerik-proza { font-size: 1.08rem; }
+    .masal-meta { flex-direction: column; gap: var(--space-2); }
+    /* Drop-cap mobilde daha küçük — büyük harf dar ekranda görsel olarak ağır */
+    .masal-icerik-proza :global(p:first-of-type)::first-letter {
+      font-size: 2.6rem;
+      padding-right: 0.4rem;
+      padding-top: 0.2rem;
+    }
+  }
+</style>

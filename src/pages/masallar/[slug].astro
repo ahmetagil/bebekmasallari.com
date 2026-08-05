@@ -1,0 +1,26 @@
+---
+// ============================================================
+// /masallar/[slug].astro — Dinamik masal sayfası.
+// getStaticPaths ile her masal için statik HTML üretilir.
+// ============================================================
+import { getCollection } from 'astro:content';
+import MasalLayout from '../../layouts/Masal.astro';
+
+export async function getStaticPaths() {
+  const masallar = await getCollection('masallar');
+  return masallar.map((masal) => ({
+    params: { slug: masal.slug },
+    props: { masal },
+  }));
+}
+
+const { masal } = Astro.props;
+
+// Aynı kategoriden diğer masallar (ilgili masallar için)
+const tumMasallar = await getCollection('masallar');
+const ilgiliMasallar = tumMasallar
+  .filter((m) => m.data.kategori === masal.data.kategori && m.slug !== masal.slug)
+  .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
+---
+
+<MasalLayout masal={masal} ilgiliMasallar={ilgiliMasallar} />

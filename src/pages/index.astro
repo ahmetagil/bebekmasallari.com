@@ -1,0 +1,333 @@
+---
+// ============================================================
+// index.astro — Anasayfa. Hero + son masallar + kategoriler.
+// ============================================================
+import Base from '../layouts/Base.astro';
+import MasalKart from '../components/MasalKart.astro';
+import { KATEGORILER, SITE } from '../config';
+import { getCollection } from 'astro:content';
+
+const tumMasallar = await getCollection('masallar');
+const sonMasallar = tumMasallar
+  .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime())
+  .slice(0, 6);
+
+// Her kategoriden masal sayısı
+const kategoriSayilari = Object.keys(KATEGORILER).reduce((acc, slug) => {
+  acc[slug] = tumMasallar.filter((m) => m.data.kategori === slug).length;
+  return acc;
+}, {} as Record<string, number>);
+
+const toplamMasal = tumMasallar.length;
+---
+
+<Base>
+  <!-- Hero bölümü -->
+  <section class="hero">
+    <div class="container hero-grid">
+      <div class="hero-metin">
+        <span class="hero-rozet">🌙 Her akşam yeni bir masal</span>
+        <h1>Çocuğunuzun uykusuna eşlik eden <span class="vurgu">sıcacık masallar</span></h1>
+        <p class="hero-aciklama">
+          Bebek ve çocuklar için özgün uyku, arkadaşlık, cesaret ve sevgi
+          masalları. Her masalın sonunda ebeveynler için dersler ve tartışma
+          soruları. Akşam rutininizin en güzel parçası.
+        </p>
+        <div class="hero-cta">
+          <a href="#son-masallar" class="btn btn-primary">Masalları Keşfet →</a>
+          <a href="/kategori/uyku-masallari" class="btn btn-outline">🌙 Uyku Masalları</a>
+        </div>
+        <div class="hero-istatistik">
+          <div class="ist-item">
+            <strong>{toplamMasal}+</strong>
+            <span>özgün masal</span>
+          </div>
+          <div class="ist-item">
+            <strong>5</strong>
+            <span>kategori</span>
+          </div>
+          <div class="ist-item">
+            <strong>Ücretsiz</strong>
+            <span>her zaman</span>
+          </div>
+        </div>
+      </div>
+      <div class="hero-gorsel" aria-hidden="true">
+        <div class="ay-figur">🌙</div>
+        <div class="yildiz s1">⭐</div>
+        <div class="yildiz s2">✨</div>
+        <div class="yildiz s3">⭐</div>
+        <div class="bulut b1">☁️</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Kategoriler -->
+  <section class="kategoriler" aria-labelledby="kat-baslik">
+    <div class="container">
+      <div class="bolum-baslik">
+        <h2 id="kat-baslik">Masal Kategorileri</h2>
+        <p>Çocuğunuzun o anki ihtiyacına göre bir masal seçin</p>
+      </div>
+      <div class="kat-grid">
+        {Object.entries(KATEGORILER).map(([slug, k]) => (
+          <a
+            href={`/kategori/${slug}/`}
+            class="kat-kart"
+            style={`--k-renk: ${k.renk}; --k-renk-acik: ${k.renkAcik};`}
+          >
+            <span class="kat-emoji" aria-hidden="true">{k.emoji}</span>
+            <h3>{k.isim}</h3>
+            <p>{k.aciklama}</p>
+            <span class="kat-sayi">{kategoriSayilari[slug] || 0} masal →</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Son masallar -->
+  {sonMasallar.length > 0 && (
+    <section class="son-masallar" id="son-masallar" aria-labelledby="son-baslik">
+      <div class="container">
+        <div class="bolum-baslik">
+          <h2 id="son-baslik">En Yeni Masallar</h2>
+          <p>Henüz taze, az önce yayımlanan sıcacık masallar</p>
+        </div>
+        <div class="masal-grid">
+          {sonMasallar.map((masal, i) => (
+            <MasalKart masal={masal} index={i} />
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- Değer önerisi (neden bizi seçmelisiniz — AdSense değer sinyali) -->
+  <section class="deger-bolumu">
+    <div class="container">
+      <div class="deger-grid">
+        <div class="deger-kart">
+          <span class="deger-ikon">✍️</span>
+          <h3>Özgün ve Telifli</h3>
+          <p>Her masal tek tek, özenle yazılıyor. Kopya değil, kalıcı değer.</p>
+        </div>
+        <div class="deger-kart">
+          <span class="deger-ikon">👩‍👧‍👦</span>
+          <h3>Ebeveyn Rehberi</h3>
+          <p>Her masala eşlik eden dersler ve sorularla bağınızı derinleştirin.</p>
+        </div>
+        <div class="deger-kart">
+          <span class="deger-ikon">📱</span>
+          <h3>Her Yerde Okuyun</h3>
+          <p>Telefonunuzdan, tabletinizden, bilgisayarınızdan — reklamsız, hızlı.</p>
+        </div>
+        <div class="deger-kart">
+          <span class="deger-ikon">🎁</span>
+          <h3>Tamamen Ücretsiz</h3>
+          <p>Abonelik yok, ödeme yok. Sadece okuyun ve paylaşın.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  /* HERO */
+  .hero {
+    background: linear-gradient(180deg, var(--lavanta-acik) 0%, var(--krem) 100%);
+    padding-block: var(--space-16) var(--space-12);
+    overflow: hidden;
+  }
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    align-items: center;
+    gap: var(--space-8);
+  }
+  .hero-rozet {
+    display: inline-block;
+    background: white;
+    color: var(--vurgu-koyu);
+    padding: 0.4rem 1rem;
+    border-radius: var(--radius-full);
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: var(--space-4);
+    box-shadow: var(--shadow-sm);
+  }
+  .hero h1 {
+    margin-bottom: var(--space-4);
+    font-size: clamp(2rem, 5vw, 3rem);
+    line-height: 1.15;
+  }
+  .hero h1 .vurgu {
+    color: var(--vurgu);
+    font-style: italic;
+  }
+  .hero-aciklama {
+    font-size: 1.15rem;
+    color: var(--yazi-yumuşak);
+    max-width: 50ch;
+    margin-bottom: var(--space-6);
+  }
+  .hero-cta {
+    display: flex;
+    gap: var(--space-3);
+    flex-wrap: wrap;
+    margin-bottom: var(--space-8);
+  }
+  .hero-istatistik {
+    display: flex;
+    gap: var(--space-8);
+  }
+  .ist-item {
+    display: flex;
+    flex-direction: column;
+  }
+  .ist-item strong {
+    font-size: 1.5rem;
+    color: var(--vurgu-koyu);
+    font-family: var(--font-serif);
+  }
+  .ist-item span {
+    font-size: 0.85rem;
+    color: var(--yazi-acik);
+  }
+
+  /* Hero görsel */
+  .hero-gorsel {
+    position: relative;
+    height: 380px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .ay-figur {
+    font-size: 12rem;
+    filter: drop-shadow(0 10px 30px rgba(123, 158, 181, 0.3));
+  }
+  .yildiz, .bulut {
+    position: absolute;
+  }
+  .s1 { font-size: 2rem; top: 15%; left: 20%; }
+  .s2 { font-size: 1.5rem; top: 25%; right: 15%; }
+  .s3 { font-size: 1.2rem; bottom: 30%; left: 10%; }
+  .b1 { font-size: 3rem; bottom: 15%; right: 20%; }
+
+  /* KATEGORİLER */
+  .kategoriler {
+    padding-block: var(--space-16);
+  }
+  .bolum-baslik {
+    text-align: center;
+    margin-bottom: var(--space-12);
+  }
+  .bolum-baslik h2 {
+    margin-bottom: var(--space-2);
+  }
+  .bolum-baslik p {
+    color: var(--yazi-yumuşak);
+    font-size: 1.05rem;
+  }
+  .kat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: var(--space-4);
+  }
+  .kat-kart {
+    display: flex;
+    flex-direction: column;
+    padding: var(--space-6);
+    background: white;
+    border: 1px solid transparent;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    transition: all 0.2s ease;
+    color: var(--yazi);
+  }
+  .kat-kart:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--k-renk);
+    text-decoration: none;
+  }
+  .kat-emoji {
+    font-size: 2.5rem;
+    margin-bottom: var(--space-2);
+  }
+  .kat-kart h3 {
+    font-size: 1.15rem;
+    margin-bottom: var(--space-2);
+  }
+  .kat-kart p {
+    color: var(--yazi-yumuşak);
+    font-size: 0.92rem;
+    flex: 1;
+    margin-bottom: var(--space-3);
+  }
+  .kat-sayi {
+    color: var(--vurgu-koyu);
+    font-weight: 600;
+    font-size: 0.9rem;
+  }
+
+  /* SON MASALLAR */
+  .son-masallar {
+    padding-block: var(--space-16);
+    background: var(--bg-bolum);
+  }
+  .masal-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr));
+    gap: var(--space-6);
+  }
+
+  /* DEĞER */
+  .deger-bolumu {
+    padding-block: var(--space-16);
+  }
+  .deger-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: var(--space-6);
+  }
+  .deger-kart {
+    text-align: center;
+    padding: var(--space-6) var(--space-4);
+  }
+  .deger-ikon {
+    font-size: 2.5rem;
+    display: block;
+    margin-bottom: var(--space-3);
+  }
+  .deger-kart h3 {
+    font-size: 1.1rem;
+    margin-bottom: var(--space-2);
+  }
+  .deger-kart p {
+    color: var(--yazi-yumuşak);
+    font-size: 0.92rem;
+  }
+
+  @media (max-width: 860px) {
+    .hero-grid {
+      grid-template-columns: 1fr;
+      text-align: center;
+    }
+    .hero-aciklama { margin-inline: auto; }
+    .hero-cta, .hero-istatistik {
+      justify-content: center;
+    }
+    .hero-gorsel {
+      order: -1;
+      height: 240px;
+    }
+    .ay-figur { font-size: 8rem; }
+  }
+  @media (max-width: 480px) {
+    .hero-istatistik {
+      gap: var(--space-4);
+    }
+  }
+</style>

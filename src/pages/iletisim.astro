@@ -1,0 +1,110 @@
+---
+// İletişim sayfası
+import Base from '../layouts/Base.astro';
+import { SITE } from '../config';
+---
+
+<Base
+  title="İletişim"
+  description="bebekmasallari.com ile iletişime geçin. Öneri, geri bildirim ve işbirlikleri için bize yazın."
+>
+  <article class="sayfa-icerik">
+    <div class="container oku-alani">
+      <header class="sayfa-baslik">
+        <h1>İletişim</h1>
+        <p class="sayfa-altbaslik">Sizden haber almak isteriz</p>
+      </header>
+
+      <div class="proza">
+        <p>
+          Bir masal isteğiniz mi var? Bir geri bildiriminiz mi? Belki de
+          işbirliği yapmak istiyorsunuz. Her mesajınız bizim için değerli.
+        </p>
+
+        <div class="iletisim-kartlari">
+          <div class="iletisim-kart">
+            <span class="ikon" aria-hidden="true">📧</span>
+            <h3>E-posta</h3>
+            <p>En hızlı ulaşım yolu. Genellikle 2-3 gün içinde yanıtlarız.</p>
+            <a href={`mailto:${SITE.email}`} class="eposta-link">{SITE.email}</a>
+          </div>
+
+          <div class="iletisim-kart">
+            <span class="ikon" aria-hidden="true">💡</span>
+            <h3>Masal İsteği</h3>
+            <p>Belirli bir tema, karakter veya ders istiyorsunuz? Yazın, deneyelim.</p>
+            <a href={`mailto:${SITE.email}?subject=Masal İsteği`} class="btn btn-outline">İstek gönder</a>
+          </div>
+
+          <div class="iletisim-kart">
+            <span class="ikon" aria-hidden="true">🤝</span>
+            <h3>İşbirliği</h3>
+            <p>Yayınevi, içerik üreticisi veya marka mısiniz? Konuşalım.</p>
+            <a href={`mailto:${SITE.email}?subject=İşbirliği`} class="btn btn-outline">İletişime geç</a>
+          </div>
+        </div>
+
+        <div class="yanit-suresi">
+          <h3>⏱️ Yanıt süresi</h3>
+          <p>
+            Bu site küçük bir ekip (bazen tek kişi) tarafından severek
+            yürütülüyor. E-postalarınızı en kısa sürede yanıtlamaya çalışıyoruz.
+            Lütfen 2-3 iş günü verin.
+          </p>
+        </div>
+      </div>
+    </div>
+  </article>
+</Base>
+
+<style>
+  .sayfa-icerik { padding-block: var(--space-12) var(--space-16); }
+  .sayfa-baslik {
+    text-align: center;
+    margin-bottom: var(--space-12);
+  }
+  .sayfa-altbaslik {
+    color: var(--yazi-yumuşak);
+    font-size: 1.15rem;
+  }
+  .proza { font-size: 1.1rem; line-height: 1.8; }
+  .proza > p { text-align: center; max-width: 50ch; margin-inline: auto; margin-bottom: var(--space-12); }
+
+  .iletisim-kartlari {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: var(--space-6);
+    margin-bottom: var(--space-16);
+  }
+  .iletisim-kart {
+    background: white;
+    padding: var(--space-8) var(--space-6);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    text-align: center;
+    border: 1px solid var(--krem-koyu);
+  }
+  .iletisim-kart .ikon { font-size: 3rem; display: block; margin-bottom: var(--space-3); }
+  .iletisim-kart h3 { margin-bottom: var(--space-2); }
+  .iletisim-kart p {
+    color: var(--yazi-yumuşak);
+    font-size: 0.95rem;
+    margin-bottom: var(--space-4);
+  }
+  .eposta-link {
+    font-weight: 600;
+    color: var(--vurgu-koyu);
+    word-break: break-all;
+  }
+
+  .yanit-suresi {
+    background: var(--bg-bolum);
+    padding: var(--space-8);
+    border-radius: var(--radius-lg);
+  }
+  .yanit-suresi h3 {
+    margin-bottom: var(--space-3);
+    color: var(--vurgu-koyu);
+  }
+  .yanit-suresi p { color: var(--yazi-yumuşak); margin: 0; }
+</style>

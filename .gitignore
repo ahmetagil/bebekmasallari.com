@@ -1,0 +1,28 @@
+# build çıktısı
+dist/
+.output/
+
+# bağımlılıklar
+node_modules/
+
+# astro
+.astro/
+
+# admin paneli — sadece lokalde, production'a gitmez
+# (kullanmak istersen bu satırı kaldır)
+# admin/
+
+# ortam değişkenleri
+.env
+.env.production
+.env.local
+
+# sistem
+.DS_Store
+Thumbs.db
+*.log
+npm-debug.log*
+
+# editör
+.vscode/
+.idea/

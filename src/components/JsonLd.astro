@@ -1,0 +1,107 @@
+---
+// ============================================================
+// JsonLd.astro — Schema.org yapılandırılmış verisi (JSON-LD).
+// Google'ın içeriği "anlaması" ve zengin sonuçlar (rich
+// snippets) göstermesi için kritik. AdSense değerlendirmesinde
+// de içerik kalitesinin sinyali.
+// ============================================================
+import { SITE } from '../config';
+
+interface Props {
+  // Sayfa tipine göre şema
+  type: 'website' | 'article' | 'breadcrumb' | 'organization';
+  // Article için
+  article?: {
+    title: string;
+    description: string;
+    url: string;
+    image?: string;
+    datePublished: string;
+    dateModified?: string;
+    author?: string;
+    section?: string;
+  };
+  // Breadcrumb için: kategori yolu
+  breadcrumbs?: Array<{ name: string; url: string }>;
+}
+
+const { type, article, breadcrumbs } = Astro.props;
+
+let schema: Record<string, any> | null = null;
+
+// 1) Organization / WebSite şeması (tüm sitede)
+if (type === 'organization') {
+  schema = {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: SITE.title,
+    alternateName: SITE.name,
+    url: SITE.url,
+    description: SITE.description,
+    inLanguage: SITE.language,
+    publisher: {
+      '@type': 'Organization',
+      name: SITE.title,
+      url: SITE.url,
+      email: SITE.email,
+    },
+    potentialAction: {
+      '@type': 'SearchAction',
+      target: `${SITE.url}/?q={search_term_string}`,
+      'query-input': 'required name=search_term_string',
+    },
+  };
+}
+
+// 2) Article şeması (her masal sayfasında — SEO için en değerlisi)
+if (type === 'article' && article) {
+  schema = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: article.title,
+    description: article.description,
+    url: article.url,
+    image: article.image
+      ? new URL(article.image, SITE.url).href
+      : new URL(SITE.defaultOgImage, SITE.url).href,
+    datePublished: article.datePublished,
+    dateModified: article.dateModified || article.datePublished,
+    inLanguage: SITE.language,
+    author: {
+      '@type': 'Organization',
+      name: article.author || SITE.author,
+      url: SITE.url,
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: SITE.title,
+      url: SITE.url,
+    },
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': article.url,
+    },
+    ...(article.section
+      ? { articleSection: article.section }
+      : {}),
+  };
+}
+
+// 3) BreadcrumbList (sayfa hiyerarşisi — Google breadcrumb'ı için)
+if (type === 'breadcrumb' && breadcrumbs) {
+  schema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: breadcrumbs.map((b, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      name: b.name,
+      item: new URL(b.url, SITE.url).href,
+    })),
+  };
+}
+---
+
+{schema && (
+  <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+)}

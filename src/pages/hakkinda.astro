@@ -1,0 +1,105 @@
+---
+// Hakkımızda sayfası
+import Base from '../layouts/Base.astro';
+import { SITE } from '../config';
+const yil = new Date().getFullYear();
+const yas = yil - SITE.foundedYear + 1;
+---
+
+<Base
+  title="Hakkımızda"
+  description="bebekmasallari.com neden var? Özgün, ebeveyn rehberli masallarla akşam rutininizi güzelleştirmek için buradayız. Hikayemizi okuyun."
+>
+  <article class="sayfa-icerik">
+    <div class="container oku-alani">
+      <header class="sayfa-baslik">
+        <h1>Hakkımızda</h1>
+        <p class="sayfa-altbaslik">Bebek ve çocuklar için özgün masalların adresi</p>
+      </header>
+
+      <div class="proza">
+        <p>
+          <strong>{SITE.name}</strong>, 2026'da basit bir düşünceyle doğdu:
+          Her ebeveyn, çocuğunu uykuya yatırmak için kaliteli, sıcacık ve
+          <em>özgün</em> masallara ihtiyaç duyuyor. Çoğu zaman internette
+          bulabildiklerimiz ya binlerce kez tekrarlanmış klasikler ya da
+          kalitesiz, aceleyle yazılmış metinler.
+        </p>
+
+        <p>
+          Biz farklı bir şey istedik: Her bir masalın özenle yazıldığı,
+          çocuğun gelişimine gerçekten katkı sağladığı ve ebeveynlere de
+          eşlik eden bir kaynak. Bu yüzden her masalın sonuna
+          <strong>ebeveyn rehberi</strong> ekliyoruz — masaldan çıkarılabilecek
+          dersler ve çocuğunuzla konuşabileceğiniz sorular.
+        </p>
+
+        <h2>Ne yapıyoruz?</h2>
+        <ul>
+          <li><strong>Özgün masallar yazıyoruz:</strong> Her masal sıfırdan, tek tek kaleme alınıyor. Kopyala-yapıştır yok.</li>
+          <li><strong>5 kategoride içerik üretiyoruz:</strong> Uyku, arkadaşlık, cesaret, sevgi ve öğretici masallar.</li>
+          <li><strong>Ebeveyn rehberi sunuyoruz:</strong> Her masala uygun yaş aralığı, dersler ve tartışma soruları.</li>
+          <li><strong>Ücretsiz tutuyoruz:</strong> Abonelik yok, ödeme yok. İsteyen herkes okuyabilir.</li>
+        </ul>
+
+        <h2>Neden masallar?</h2>
+        <p>
+          Masallar sadece eğlence değildir. Çocuklar masallar aracılığıyla
+          dünyayı anlamlandırır, duygularını tanır, değerleri öğrenir ve en
+          önemlisi sevdikleriyle bağ kurar. Akşam masal ritüali, çocuğun günü
+          bitirirken en güvenli şekilde uykuya dalmasına yardımcı olur.
+        </p>
+
+        <h2>İletişim</h2>
+        <p>
+          Öneriniz, geri bildiriminiz veya işbirliği teklifiniz mi var?
+          Bize <a href={`mailto:${SITE.email}`}>{SITE.email}</a> adresinden
+          ulaşabilir veya <a href="/iletisim">iletişim sayfamızdan</a> yazabilirsiniz.
+        </p>
+
+        <p class="kapanis">
+          Sıcacık masal dolu akşamlar dileriz. 🌙
+        </p>
+      </div>
+    </div>
+  </article>
+</Base>
+
+<style>
+  .sayfa-icerik {
+    padding-block: var(--space-12) var(--space-16);
+  }
+  .sayfa-baslik {
+    text-align: center;
+    margin-bottom: var(--space-12);
+  }
+  .sayfa-baslik h1 { margin-bottom: var(--space-2); }
+  .sayfa-altbaslik {
+    color: var(--yazi-yumuşak);
+    font-size: 1.15rem;
+  }
+  .proza {
+    font-size: 1.1rem;
+    line-height: 1.8;
+  }
+  .proza h2 {
+    margin-top: var(--space-12);
+    margin-bottom: var(--space-4);
+    color: var(--vurgu-koyu);
+  }
+  .proza ul {
+    margin-bottom: var(--space-6);
+  }
+  .proza li {
+    margin-bottom: var(--space-2);
+  }
+  .kapanis {
+    margin-top: var(--space-12);
+    padding-top: var(--space-6);
+    border-top: 1px solid var(--krem-koyu);
+    font-style: italic;
+    color: var(--yazi-yumuşak);
+    text-align: center;
+    font-size: 1.2rem;
+  }
+</style>

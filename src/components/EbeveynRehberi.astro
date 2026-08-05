@@ -1,0 +1,151 @@
+---
+// ============================================================
+// EbeveynRehberi.astro — AdSense onayı için EN KRİTİK bileşen.
+// Masal metnine "değer" katar; saf kurgu red sebebini ortadan
+// kaldırır. Ebeveynlere pratik çıkarımlar sunar.
+// ============================================================
+import { KATEGORILER } from '../config';
+
+interface Props {
+  yasAraligi: string;
+  okumaSuresi: number;
+  dersler: string[];
+  tartismaSorulari: string[];
+  kategori: keyof typeof KATEGORILER;
+}
+
+const { yasAraligi, okumaSuresi, dersler, tartismaSorulari, kategori } = Astro.props;
+const kat = KATEGORILER[kategori];
+---
+
+<section class="ebeveyn-rehberi" aria-labelledby="rehber-baslik">
+  <div class="rehber-ust">
+    <span class="rehber-ikon" aria-hidden="true">👩‍👧‍👦</span>
+    <h2 id="rehver-baslik">Ebeveynler İçin Rehber</h2>
+  </div>
+  <p class="rehber-giris">
+    Bu masalı çocuğunuzla birlikte okurken veya okuduktan sonra
+    kullanabileceğiniz pratik bir rehber hazırladık. Masalın sadece
+    eğlence olmadığını, aynı zamanda bir öğrenme ve bağ kurma anı
+    olduğunu unutmayın.
+  </p>
+
+  <div class="rehber-grid">
+    <!-- Hızlı bilgi -->
+    <div class="rehber-bilgi">
+      <h3>Bu Masal Hakkında</h3>
+      <dl>
+        <dt>📂 Kategori</dt>
+        <dd>{kat.isim}</dd>
+        <dt>👶 Uygun yaş</dt>
+        <dd>{yasAraligi}</dd>
+        <dt>⏱️ Okuma süresi</dt>
+        <dd>Yaklaşık {okumaSuresi} dakika</dd>
+      </dl>
+    </div>
+
+    <!-- Dersler -->
+    <div class="rehber-bolum">
+      <h3>Masaldan Çıkarılabilecek Dersler</h3>
+      <ul>
+        {dersler.map((ders) => <li>{ders}</li>)}
+      </ul>
+    </div>
+
+    <!-- Tartışma soruları -->
+    <div class="rehber-bolum">
+      <h3>Çocuğunuzla Konuşmak İçin Sorular</h3>
+      <p class="rehber-ipucu">
+        Masaldan sonra bu soruları sorarak çocuğunuzun duygularını
+        anlamasına ve kendini ifade etmesine yardımcı olabilirsiniz.
+      </p>
+      <ol>
+        {tartismaSorulari.map((soru) => <li>{soru}</li>)}
+      </ol>
+    </div>
+  </div>
+</section>
+
+<style>
+  .ebeveyn-rehberi {
+    background: linear-gradient(135deg, var(--mint-acik), var(--lavanta-acik));
+    border-radius: var(--radius-lg);
+    padding: var(--space-8) var(--space-6);
+    margin-block: var(--space-12);
+    border: 1px solid rgba(168, 213, 186, 0.4);
+  }
+
+  .rehber-ust {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    margin-bottom: var(--space-3);
+  }
+  .rehber-ikon { font-size: 2rem; }
+  .rehber-ust h2 { margin: 0; }
+
+  .rehber-giris {
+    color: var(--yazi-yumuşak);
+    margin-bottom: var(--space-8);
+    max-width: 60ch;
+  }
+
+  .rehber-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-8);
+  }
+  .rehber-grid > :first-child {
+    grid-column: 1 / -1;
+  }
+
+  .rehber-bilgi,
+  .rehber-bolum {
+    background: rgba(255, 255, 255, 0.6);
+    padding: var(--space-6);
+    border-radius: var(--radius-md);
+  }
+
+  .rehber-bilgi h3,
+  .rehber-bolum h3 {
+    font-size: 1.1rem;
+    margin-bottom: var(--space-4);
+    color: var(--vurgu-koyu);
+  }
+
+  .rehber-bilgi dl {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: var(--space-2) var(--space-4);
+    margin: 0;
+  }
+  .rehber-bilgi dt {
+    font-weight: 600;
+    color: var(--yazi-yumuşak);
+  }
+  .rehber-bilgi dd {
+    margin: 0;
+  }
+
+  .rehber-bolum ul,
+  .rehber-bolum ol {
+    color: var(--yazi-yumuşak);
+    padding-left: 1.2rem;
+  }
+  .rehber-bolum li {
+    margin-bottom: var(--space-2);
+  }
+
+  .rehber-ipucu {
+    font-size: 0.9rem;
+    color: var(--yazi-acik);
+    font-style: italic;
+    margin-bottom: var(--space-4);
+  }
+
+  @media (max-width: 640px) {
+    .rehber-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

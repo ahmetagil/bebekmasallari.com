@@ -1,0 +1,103 @@
+---
+// ============================================================
+// Footer.astro — Alt bilgi. Ebeveynler için güven veren,
+// yasal bağlantıları barındıran sıcak bir kapanış.
+// ============================================================
+import { SITE, NAV } from '../config';
+const yil = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="container footer-grid">
+    <div class="footer-brand">
+      <a href="/" class="footer-logo">
+        <img src="/favicon.svg" alt="" width="32" height="32" />
+        <span>{SITE.title}</span>
+      </a>
+      <p>{SITE.tagline}</p>
+      <p class="footer-telif">
+        © {yil} {SITE.name}. Tüm masallar özgündür, izinsiz kullanılamaz.
+      </p>
+    </div>
+
+    <nav class="footer-nav" aria-label="Alt menü">
+      <h3>Keşfet</h3>
+      <ul>
+        {NAV.map((item) => (
+          <li><a href={item.href}>{item.etiket}</a></li>
+        ))}
+      </ul>
+    </nav>
+
+    <nav class="footer-nav" aria-label="Yasal menü">
+      <h3>Site</h3>
+      <ul>
+        <li><a href="/hakkinda">Hakkımızda</a></li>
+        <li><a href="/iletisim">İletişim</a></li>
+        <li><a href="/gizlilik-politikasi">Gizlilik Politikası</a></li>
+        <li><a href="/yasal-uyari">Yasal Uyarı</a></li>
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    background: var(--krem-koyu);
+    border-top: 1px solid var(--lavanta-acik);
+    margin-top: var(--space-16);
+    padding-block: var(--space-12) var(--space-8);
+  }
+
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: var(--space-8);
+  }
+
+  .footer-logo {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-family: var(--font-serif);
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: var(--yazi);
+    margin-bottom: var(--space-2);
+  }
+  .footer-logo:hover { text-decoration: none; }
+
+  .footer-brand p {
+    color: var(--yazi-yumuşak);
+    font-size: 0.95rem;
+    margin-bottom: var(--space-2);
+  }
+  .footer-telif {
+    font-size: 0.85rem !important;
+    color: var(--yazi-acik) !important;
+  }
+
+  .footer-nav h3 {
+    font-size: 1rem;
+    margin-bottom: var(--space-3);
+    color: var(--yazi);
+  }
+  .footer-nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .footer-nav li { margin-bottom: var(--space-2); }
+  .footer-nav a {
+    color: var(--yazi-yumuşak);
+    font-size: 0.95rem;
+  }
+  .footer-nav a:hover { color: var(--vurgu-koyu); }
+
+  @media (max-width: 768px) {
+    .footer-grid {
+      grid-template-columns: 1fr;
+      gap: var(--space-6);
+    }
+  }
+</style>

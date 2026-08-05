@@ -1,0 +1,180 @@
+---
+// Gizlilik Politikası — AdSense ve KVKK için zorunlu
+import Base from '../layouts/Base.astro';
+import { SITE } from '../config';
+const guncelleme = new Intl.DateTimeFormat('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' }).format(new Date());
+---
+
+<Base
+  title="Gizlilik Politikası"
+  description="bebekmasallari.com gizlilik politikası. Verilerinizi nasıl topladığımızı, kullandığımızı ve koruduğumuzu öğrenin. KVKK ve GDPR uyumlu."
+>
+  <article class="sayfa-icerik">
+    <div class="container oku-alani">
+      <header class="sayfa-baslik">
+        <h1>Gizlilik Politikası</h1>
+        <p class="sayfa-altbaslik">Son güncelleme: {guncelleme}</p>
+      </header>
+
+      <div class="yasal-metin">
+        <p class="giris">
+          Bu gizlilik politikası, <strong>{SITE.url}</strong> web sitesinin
+          ("biz", "bizim" veya "site") ziyaretçilerinden hangi bilgileri
+          topladığını, bu bilgileri nasıl kullandığını ve koruduğunu açıklar.
+          Siteyi kullanarak bu politikayı kabul etmiş olursunuz.
+        </p>
+
+        <h2>1. Topladığımız Bilgiler</h2>
+        <h3>1.1 Otomatik olarak toplanan bilgiler</h3>
+        <p>
+          Siteyi ziyaret ettiğinizde, sunucu otomatik olarak bazı teknik
+          bilgiler kaydeder: IP adresi (anonimleştirilmiş), tarayıcı türü,
+          işletim sistemi, başvuran URL, ziyaret saatleri ve gezinilen sayfalar.
+          Bu bilgiler site kullanımını analiz etmek ve güvenliği sağlamak için
+          kullanılır.
+        </p>
+
+        <h3>1.2 Sizin verdiğiniz bilgiler</h3>
+        <p>
+          Bizimle e-posta yoluyla iletişime geçtiğinizde, e-posta adresiniz
+          ve mesaj içeriğiniz tarafımızdan saklanır. Bu bilgiler yalnızca
+          size yanıt vermek için kullanılır.
+        </p>
+
+        <h2>2. Çerezler (Cookies)</h2>
+        <p>
+          Sitemiz temel işlevsellik için çerezler kullanabilir. Ayrıca
+          üçüncü taraf hizmetleri (aşağıda) kendi çerezlerini kullanabilir.
+          Tarayıcı ayarlarınızdan çerezleri kontrol edebilirsiniz.
+        </p>
+
+        <h2>3. Üçüncü Taraf Hizmetleri</h2>
+        <p>Site, aşağıdaki üçüncü taraf hizmetlerini kullanabilir:</p>
+        <ul>
+          <li>
+            <strong>Google AdSense:</strong> Reklam göstermek için. Google,
+            reklamları kişiselleştirmek için çerez kullanabilir. Detaylar için
+            <a href="https://policies.google.com/technologies/ads" target="_blank" rel="noopener">Google Reklam Politikaları</a>.
+          </li>
+          <li>
+            <strong>Google Analytics:</strong> (Kullanılıyorsa) Site kullanım
+            istatistiklerini toplamak için. Veriler anonimdir.
+          </li>
+          <li>
+            <strong>Affiliate programları (Amazon Associates vb.):</strong>
+            Önerilen ürünlerin satış ortağı bağlantılarıdır. Bu bağlantılardan
+            yapacağınız alışverişlerde, size ek maliyet olmadan, biz küçük bir
+            komisyon kazanabiliriz.
+          </li>
+          <li>
+            <strong>Cloudflare:</strong> Site güvenliği ve performansı için.
+          </li>
+        </ul>
+
+        <h2>4. Bilgileri Nasıl Kullanıyoruz?</h2>
+        <ul>
+          <li>Site içeriğini ve hizmetleri iyileştirmek için,</li>
+          <li>Site kullanımını analiz etmek için,</li>
+          <li>Hizmetle ilgili iletişim kurmak için,</li>
+          <li>Güvenliği sağlamak ve kötüye kullanımı önlemek için,</li>
+          <li>Yasal yükümlülükleri yerine getirmek için.</li>
+        </ul>
+
+        <h2>5. Bilgi Paylaşımı</h2>
+        <p>
+          Kişisel bilgilerinizi üçüncü taraflara satmıyoruz. Bilgileriniz,
+          yukarıda belirtilen hizmet sağlayıcılarla, yasal zorunluluk
+          durumlarında veya sizin açık onayınızla paylaşılabilir.
+        </p>
+
+        <h2>6. Çocukların Gizliliği</h2>
+        <p>
+          Sitemiz çocuklara yönelik içerik sunar, ancak <strong>çocuklardan
+          bilerek kişisel bilgi toplamıyoruz</strong>. Ebeveynlerin
+          rehberliğinde kullanılması amaçlanmıştır. Çocunuzdan bilgisi dışında
+          veri topladığımızı düşünüyorsanız, lütfen bizimle iletişime geçin.
+        </p>
+
+        <h2>7. Veri Güvenliği</h2>
+        <p>
+          Verilerinizi korumak için makul teknik ve organizasyonel önlemler
+          alıyoruz. Ancak internet üzerinden hiçbir veri aktarımının %100
+          güvenli olmadığını lütfen unutmayın.
+        </p>
+
+        <h2>8. Haklarınız (KVKK / GDPR)</h2>
+        <p>
+          6698 sayılı Kişisel Verilerin Korunması Kanunu (KVKK) ve Avrupa
+          Birliği Genel Veri Koruma Yönetmeliği (GDPR) kapsamında aşağıdaki
+          haklara sahipsiniz:
+        </p>
+        <ul>
+          <li>Verilerinize erişim talep etmek,</li>
+          <li>Yanlış verilerin düzeltilmesini istemek,</li>
+          <li>Verilerinizin silinmesini talep etmek,</li>
+          <li>İşlemenin sınırlandırılmasını istemek,</li>
+          <li>Veri taşınabilirliği hakkı,</li>
+          <li>İtiraz hakkı.</li>
+        </ul>
+        <p>
+          Bu haklarınızı kullanmak için <a href={`mailto:${SITE.email}`}>{SITE.email}</a>
+          adresine yazabilirsiniz.
+        </p>
+
+        <h2>9. Politika Değişiklikleri</h2>
+        <p>
+          Bu politikayı zaman zaman güncelleyebiliriz. Önemli değişiklikler
+          durumunda bu sayfada duyurulacaktır. Güncel tarih sayfanın üstünde
+          belirtilmiştir.
+        </p>
+
+        <h2>10. İletişim</h2>
+        <p>
+          Bu gizlilik politikası hakkında sorularınız varsa:
+          <a href={`mailto:${SITE.email}`}>{SITE.email}</a>
+        </p>
+      </div>
+    </div>
+  </article>
+</Base>
+
+<style>
+  .sayfa-icerik { padding-block: var(--space-12) var(--space-16); }
+  .sayfa-baslik {
+    text-align: center;
+    margin-bottom: var(--space-12);
+  }
+  .sayfa-altbaslik {
+    color: var(--yazi-acik);
+    font-size: 1rem;
+  }
+  .yasal-metin {
+    font-size: 1rem;
+    line-height: 1.8;
+    color: var(--yazi);
+  }
+  .yasal-metin .giris {
+    background: var(--bg-bolum);
+    padding: var(--space-6);
+    border-radius: var(--radius-md);
+    border-left: 4px solid var(--lavanta);
+  }
+  .yasal-metin h2 {
+    font-size: 1.3rem;
+    margin-top: var(--space-12);
+    margin-bottom: var(--space-3);
+    color: var(--vurgu-koyu);
+    padding-bottom: var(--space-2);
+    border-bottom: 1px solid var(--krem-koyu);
+  }
+  .yasal-metin h3 {
+    font-size: 1.1rem;
+    margin-top: var(--space-6);
+    margin-bottom: var(--space-2);
+  }
+  .yasal-metin ul, .yasal-metin ol {
+    margin-bottom: var(--space-4);
+    padding-left: 1.5rem;
+  }
+  .yasal-metin li { margin-bottom: var(--space-2); }
+</style>

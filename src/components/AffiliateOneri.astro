@@ -1,0 +1,174 @@
+---
+// ============================================================
+// AffiliateOneri.astro — Konuyla ilgili kitap/oyuncak önerisi.
+// Amazon Associates (veya benzeri) affiliate link'leri buraya.
+// Yasal şeffaflık: her öneride "satış ortağı" açıklaması var.
+//
+// KULLANIM: Her masal frontmatter'ında "oneriler" alanı eklenip
+// buraya props olarak geçirilebilir. Şimdilik genel bir yer
+// tutucu — link eklediğinde otomatik görünür.
+// ============================================================
+import { KATEGORILER } from '../config';
+
+interface Oneri {
+  baslik: string;
+  aciklama: string;
+  link?: string;     // affiliate link — boşsa link gösterilmez
+  fiyat?: string;
+}
+
+interface Props {
+  kategori: keyof typeof KATEGORILER;
+  oneriler?: Oneri[];
+}
+
+const { kategori, oneriler = [] } = Astro.props;
+const kat = KATEGORILER[kategori];
+
+// Eğer masala özel öneri yoksa, kategori bazlı default öneri göster
+const gosterilecekOneriler: Oneri[] = oneriler.length > 0 ? oneriler : [
+  {
+    baslik: `${kat.isim} temalı resimli kitaplar`,
+    aciklama:
+      'Çocuğunuzla birlikte okuyabileceğiniz, bu masalın temasına uygun kaliteli resimli kitaplar keşfedin.',
+    // link: 'https://www.amazon.com.tr/...' — affiliate kodun buraya
+  },
+  {
+    baslik: 'Ahşap masal figürleri',
+    aciklama:
+      'Masalı canlandırmak, çocuğunuzun hayal gücünü desteklemek için doğal ahşap figürler.',
+  },
+];
+---
+
+<aside class="affiliate-oneri" aria-labelledby="oneri-baslik">
+  <div class="oneri-ust">
+    <span class="oneri-ikon" aria-hidden="true">📚</span>
+    <div>
+      <h2 id="oneri-baslik">Bu Masala Eşlik Edenler</h2>
+      <p class="oneri-altbaslik">"{kat.isim}" temalı seçkiler</p>
+    </div>
+  </div>
+
+  <p class="oneri-sans">
+    Aşağıdaki önerilerden bazıları satış ortağı bağlantısıdır.
+    Satın alma yaparsanız küçük bir komisyon kazanırız, size ek
+    bir maliyet oluşmaz. Öneriler bağımsız editoryal seçimdir.
+    <a href="/yasal-uyari">Ayrıntılar için yasal uyarıya bakın.</a>
+  </p>
+
+  <div class="oneri-liste">
+    {gosterilecekOneriler.map((oneri) => (
+      <div class="oneri-kart">
+        <div class="oneri-kart-govde">
+          <h3>{oneri.baslik}</h3>
+          <p>{oneri.aciklama}</p>
+          {oneri.fiyat && <span class="oneri-fiyat">{oneri.fiyat}</span>}
+        </div>
+        {oneri.link ? (
+          <a
+            href={oneri.link}
+            class="oneri-btn"
+            rel=" sponsored noopener"
+            target="_blank"
+          >
+            İncele →
+          </a>
+        ) : (
+          <span class="oneri-yakinda">Yakında</span>
+        )}
+      </div>
+    ))}
+  </div>
+</aside>
+
+<style>
+  .affiliate-oneri {
+    background: var(--bg-kart);
+    border: 1px solid var(--krem-koyu);
+    border-radius: var(--radius-lg);
+    padding: var(--space-8) var(--space-6);
+    margin-block: var(--space-8);
+  }
+
+  .oneri-ust {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    margin-bottom: var(--space-3);
+  }
+  .oneri-ikon { font-size: 2rem; }
+  .oneri-ust h2 { margin: 0; font-size: 1.4rem; }
+  .oneri-altbaslik {
+    color: var(--yazi-acik);
+    font-size: 0.9rem;
+    margin: 0;
+  }
+
+  .oneri-sans {
+    font-size: 0.82rem;
+    color: var(--yazi-acik);
+    background: var(--bg-bolum);
+    padding: var(--space-3);
+    border-radius: var(--radius-sm);
+    margin-bottom: var(--space-6);
+    line-height: 1.5;
+  }
+
+  .oneri-liste {
+    display: grid;
+    gap: var(--space-4);
+  }
+
+  .oneri-kart {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+    background: var(--bg-bolum);
+    padding: var(--space-4);
+    border-radius: var(--radius-md);
+    flex-wrap: wrap;
+  }
+
+  .oneri-kart-govde h3 {
+    font-size: 1.05rem;
+    margin-bottom: var(--space-1);
+  }
+  .oneri-kart-govde p {
+    color: var(--yazi-yumuşak);
+    font-size: 0.9rem;
+    margin: 0;
+  }
+  .oneri-fiyat {
+    display: inline-block;
+    margin-top: var(--space-2);
+    font-weight: 600;
+    color: var(--vurgu-koyu);
+  }
+
+  .oneri-btn {
+    background: var(--vurgu);
+    color: white !important;
+    padding: var(--space-3) var(--space-5);
+    border-radius: var(--radius-full);
+    font-weight: 600;
+    font-size: 0.95rem;
+    white-space: nowrap;
+    transition: background 0.15s ease;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+  }
+  .oneri-btn:hover {
+    background: var(--vurgu-koyu);
+    text-decoration: none;
+  }
+
+  .oneri-yakinda {
+    color: var(--yazi-acik);
+    font-size: 0.85rem;
+    font-style: italic;
+    padding: var(--space-2) var(--space-4);
+  }
+</style>
