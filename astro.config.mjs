@@ -15,6 +15,9 @@ export default defineConfig({
   ],
   // Statik çıktı = en hızlı SEO performansı
   output: 'static',
+  // Tüm URL'ler eğik çizgili olsun (/kategori/uyku/) — SEO tutarlılığı için.
+  // 308 redirect'leri önler, analiz araçları "tutarlı" der.
+  trailingSlash: 'always',
   build: {
     // /masallar/uyku-getiren-yildiz/index.html → temiz URL'ler
     format: 'directory',

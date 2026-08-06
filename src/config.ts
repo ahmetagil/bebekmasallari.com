@@ -8,7 +8,7 @@ export const SITE = {
   title: 'Bebek Masalları',
   tagline: 'Çocuğunuzun uykusuna eşlik eden sıcacık masallar',
   description:
-    'Bebek ve çocuklar için özgün uyku, arkadaşlık, cesaret ve sevgi masalları. Her masalın sonunda ebeveynler için dersler ve tartışma soruları. Akşam rutininizin vazgeçilmezi.',
+    'Bebek ve çocuklar için özgün uyku, arkadaşlık, cesaret ve sevgi masalları. Her masalda ebeveyn rehberi: dersler ve tartışma soruları.',
   url: 'https://bebekmasallari.com',
   locale: 'tr_TR',
   language: 'tr',

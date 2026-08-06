@@ -1,9 +1,9 @@
 # bebekmasallari.com — robots.txt
-# Tüm arama motorlarına izin ver, sitemap'i bildir.
+# Tüm arama motorlarına izin ver, sitemap'leri bildir.
 
 User-agent: *
 Allow: /
 
-# Önem: Sitemap adresi tam URL olmalı (canonical).
-# Domain aktif olunca bu otomatik çalışır.
+# Sitemap — iki konum da belirtiliyor (standart + Astro varsayılan)
+Sitemap: https://bebekmasallari.com/sitemap.xml
 Sitemap: https://bebekmasallari.com/sitemap-index.xml

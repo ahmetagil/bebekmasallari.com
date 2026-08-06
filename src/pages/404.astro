@@ -1,0 +1,89 @@
+---
+// 404.astro — "Sayfa bulunamadı" sayfası.
+// Astro, olmayan bir rotaya gidildiğinde bunu üretir ve
+// doğru 404 HTTP kodu döndürür (soft-404 sorununu çözer).
+import Base from '../layouts/Base.astro';
+import { KATEGORILER } from '../config';
+---
+
+<Base
+  title="Sayfa Bulunamadı (404)"
+  description="Aradığınız sayfa bulunamadı. Bebek Masalları ana sayfasına dönebilir veya bir kategori seçebilirsiniz."
+>
+  <section class="hatirlat-bolumu">
+    <div class="container oku-alani">
+      <div class="yildiz-mutlu">🌙</div>
+      <h1>Hop! Bu masal daha yazılmamış...</h1>
+      <p class="yazi-buyuk">
+        Galiba bir yıldızın peşinden kayıp yanlış sayfaya düştün.
+        Merak etme — tüm güzel masallar ana sayfada seni bekliyor.
+      </p>
+
+      <div class="aksiyon">
+        <a href="/" class="btn btn-primary">🏠 Ana sayfaya dön</a>
+      </div>
+
+      <div class="kategori-oneri">
+        <p class="oneri-baslik">Ya da bir kategori seç:</p>
+        <div class="kategori-liste">
+          {Object.entries(KATEGORILER).map(([slug, k]) => (
+            <a href={`/kategori/${slug}/`} class="kategori-cips" style={`--k-renk: ${k.renk}; --k-renk-acik: ${k.renkAcik};`}>
+              <span aria-hidden="true">{k.emoji}</span> {k.isim}
+            </a>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .hatirlat-bolumu {
+    padding-block: var(--space-16);
+    text-align: center;
+  }
+  .yildiz-mutlu {
+    font-size: 5rem;
+    margin-bottom: var(--space-4);
+  }
+  .yazi-buyuk {
+    font-size: 1.15rem;
+    color: var(--yazi-yumuşak);
+    max-width: 45ch;
+    margin-inline: auto;
+    margin-bottom: var(--space-8);
+  }
+  .aksiyon {
+    margin-bottom: var(--space-12);
+  }
+  .kategori-oneri {
+    border-top: 1px solid var(--krem-koyu);
+    padding-top: var(--space-8);
+  }
+  .oneri-baslik {
+    color: var(--yazi-yumuşak);
+    margin-bottom: var(--space-4);
+  }
+  .kategori-liste {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    justify-content: center;
+  }
+  .kategori-cips {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+    background: var(--k-renk-acik);
+    color: var(--yazi);
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius-full);
+    font-weight: 500;
+    font-size: 0.95rem;
+    transition: transform 0.15s ease;
+  }
+  .kategori-cips:hover {
+    transform: translateY(-2px);
+    text-decoration: none;
+  }
+</style>

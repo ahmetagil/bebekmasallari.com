@@ -44,8 +44,12 @@ const sayfaUrl = canonical || (pathname ? new URL(pathname, SITE.url).href : SIT
 // Tam görsel URL'i (OG mutlak URL ister)
 const gorselUrl = new URL(image, SITE.url).href;
 
-// Başlık optimizasyonu: ~60 karakter sınırı
-const tamTitle = title ? `${title} | ${SITE.title}` : `${SITE.title} — ${SITE.tagline}`;
+// Başlık optimizasyonu: 30-60 karakter ideal
+// Alt sayfalarda "Sayfa Başlığı | Bebek Masalları" formatı
+// Ana sayfada bilgi ekleyip 30-60 aralığına getirelim
+const tamTitle = title
+  ? `${title} | ${SITE.title}`
+  : `${SITE.title} — Özgün çocuk masalları`;
 ---
 
 <!-- Temel meta -->
@@ -66,6 +70,8 @@ const tamTitle = title ? `${title} | ${SITE.title}` : `${SITE.title} — ${SITE.
 <meta property="og:url" content={sayfaUrl} />
 <meta property="og:image" content={gorselUrl} />
 <meta property="og:image:alt" content={title || SITE.title} />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
 <meta property="og:locale" content={SITE.locale} />
 
 {type === 'article' && article && (

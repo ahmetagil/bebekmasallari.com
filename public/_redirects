@@ -1,0 +1,5 @@
+# Cloudflare Pages yönlendirmeleri
+# Bu dosya public/ içindedir, build sonrası dist/_redirects olur.
+
+# Analiz araçlarının beklediği standart sitemap konumu → gerçek sitemap
+/sitemap.xml /sitemap-index.xml 301

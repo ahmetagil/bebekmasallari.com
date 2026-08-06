@@ -97,8 +97,18 @@ const tarihFormatli = new Intl.DateTimeFormat('tr-TR', {
         <div class="masal-meta">
           <span title="Yaş aralığı">👶 {data.yasAraligi}</span>
           <span title="Okuma süresi">⏱️ {data.okumaSuresi} dk okuma</span>
-          <span title="Yayın tarihi">📅 {tarihFormatli}</span>
+          <time datetime={pubIso} title="Yayın tarihi">📅 {tarihFormatli}</time>
         </div>
+
+        <!-- Yapısal tarih etiketi — E-E-A-T sinyali -->
+        <p class="yayin-bilgisi">
+          <span>Yazan: <strong>{data.author}</strong></span>
+          <span aria-hidden="true">·</span>
+          <time datetime={pubIso}>{tarihFormatli}</time> tarihinde yayınlandı
+          {data.updatedDate && (
+            <>· <time datetime={modIso}>{new Intl.DateTimeFormat('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' }).format(new Date(data.updatedDate))}</time> tarihinde güncellendi</>
+          )}
+        </p>
       </div>
     </header>
 
@@ -208,6 +218,25 @@ const tarihFormatli = new Intl.DateTimeFormat('tr-TR', {
     flex-wrap: wrap;
     color: var(--yazi-acik);
     font-size: 0.9rem;
+    margin-bottom: var(--space-3);
+  }
+
+  .yayin-bilgisi {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: var(--space-2);
+    flex-wrap: wrap;
+    color: var(--yazi-acik);
+    font-size: 0.82rem;
+    margin-top: var(--space-2);
+  }
+  .yayin-bilgisi strong {
+    color: var(--yazi-yumuşak);
+  }
+  .yayin-bilgisi time {
+    font-weight: 500;
+    color: var(--yazi-yumuşak);
   }
 
   .masal-metni {
