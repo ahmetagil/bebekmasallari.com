@@ -18,6 +18,10 @@ export const SITE = {
   email: 'merhaba@bebekmasallari.com',
   author: 'bebekmasallari.com',
   foundedYear: 2026,
+  // AdSense yayıncı ID'si (alıcının hesabı).
+  // Boş bırakılırsa AdSense script'i hiç yüklenmez.
+  // Değişirse sadece bu satırı güncelle.
+  adsenseClient: 'ca-pub-2917605569005680',
 } as const;
 
 // Kategoriler — tek yerde tanımlı, her yerde kullanılır.

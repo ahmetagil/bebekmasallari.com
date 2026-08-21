@@ -50,6 +50,16 @@ const {
     <JsonLd type="organization" />
     <!-- Article şeması masal sayfalarında slot ile eklenir -->
     <slot name="jsonld" />
+
+    <!-- Google AdSense — siteyi yayıncı hesabına tanıtır.
+         Client ID config.ts'ten gelir; boşsa script yüklenmez. -->
+    {SITE.adsenseClient && (
+      <script
+        async
+        src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${SITE.adsenseClient}`}
+        crossorigin="anonymous"
+      ></script>
+    )}
   </head>
   <body>
     <a href="#ana-icerik" class="skip-link">İçeriğe geç</a>
